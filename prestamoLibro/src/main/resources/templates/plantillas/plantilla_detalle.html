@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+<table th:fragment="detalle_prestamo" class="d-none">
+	<tbody id="plantilla_detalle">
+		<tr id="fila_{ID}">
+			<td class="d-none align-middle">
+				<<input type="hidden" value="{ID}" name="detalle_id[]"/>
+			</td>
+			<td class="align-middle">{TITULO}</td>
+			<td class="align-middle">{AUTOR}</td>
+			<td class="align-middle">{EDITORIAL}</td>
+			<td class="align-middle">{ANIO}</td>
+			<td class="align-middle">{EDICION}</td>
+
+			<td class="align-middle text-center">
+
+                <a href="#" onclick="utils.eliminarDetalle({ID})" title="Eliminar">
+				    <i class="bi-trash" style="color: indianred"></i>
+                </a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>
+
+

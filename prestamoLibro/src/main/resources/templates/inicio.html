@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{plantillas/principal :: head}">
+  <style>
+    body {
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .hero {
+      text-align: center;
+      color: #2c3e50;
+      padding: 3rem 1rem;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #4b3832;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #6b4f4f;
+      margin-bottom: 2rem;
+    }
+
+    .feature-card {
+      background: #fffaf0;
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      color: #b5651d;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      color: #4b3832;
+    }
+
+    .btn-biblio {
+      background-color: #b5651d;
+      color: white;
+      border-radius: 30px;
+      padding: 0.8rem 2rem;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .btn-biblio:hover {
+      background-color: #8e4a12;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+  <header th:replace="~{plantillas/principal :: header}"></header>
+
+  <main class="flex-grow-1 container py-5">
+    <div class="hero">
+      <h1>Bienvenido a la Biblioteca Digital</h1>
+      <p>Administra los préstamos de libros, consulta usuarios y disfruta de la lectura organizada.</p>
+      <a th:href="@{/prestamolibro/usuarioslistar}" class="btn btn-biblio shadow-lg">Usuarios de la Biblioteca</a>
+    </div>
+
+    <div class="row text-center g-4 mt-5">
+      <div class="col-md-4">
+        <div class="card feature-card p-4">
+          <div class="feature-icon"><i class="bi bi-book"></i></div>
+          <h5 class="feature-title">Gestión de Libros</h5>
+          <p>Agrega, consulta y organiza todos los libros disponibles en la biblioteca.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card feature-card p-4">
+          <div class="feature-icon"><i class="bi bi-people"></i></div>
+          <h5 class="feature-title">Usuarios y Préstamos</h5>
+          <p>Controla los préstamos de libros y lleva registro de los usuarios de manera eficiente.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card feature-card p-4">
+          <div class="feature-icon"><i class="bi bi-bar-chart-line"></i></div>
+          <h5 class="feature-title">Reportes y Actividad</h5>
+          <p>Consulta estadísticas de préstamos y obtén reportes detallados sobre el uso de la biblioteca.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer th:replace="~{plantillas/principal :: footer}"></footer>
+</body>
+</html>

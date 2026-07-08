@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+
+<!-- importar la libreria axios desde una Red de Entrega de Contenido o Content Delivery Network (CDN) -->
+<!-- un servicio externo para alojar y distribuir archivos estáticos de tu sitio web: js, css, img, etc -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script th:fragment="script">
+
+    // El evento DOMContentLoaded se activa cuando el documento HTML ya se ha analizado por completo
+    document.addEventListener('DOMContentLoaded', function(){
+        const buscarLibro = document.getElementById('buscar_libro'); 
+        const sugerencias = document.getElementById('sugerencias'); 
+
+
+
+        // asigna un evento input a buscarProducto con async/await
+        //cada vez que cambie buscar el metodo a utilizar
+        buscarLibro.addEventListener('input', async function() {
+            const term = buscarLibro.value;
+           
+
+            if (term.length === 0) {
+                sugerencias.style.display = 'none';
+                return; // evita hacer la petición si está vacío
+            }
+
+            try {
+                // llamar a la API con axios usando await
+                const response = await axios.get(`/prestamolibro/cargarlibros/${term}`);
+                  console.log("Respuesta backend:", response.data); 
+                mostrarSugerencias(response.data); // los datos están en response.data
+              
+
+            } catch (error) {
+                console.error('Error recuperando libros:', error);
+            }
+        });
+        
+        // llena y muestra la caja de sugerencias
+        function mostrarSugerencias(data) {
+         
+            sugerencias.innerHTML = ''; // limpiar sugerencias anteriores
+            if (data.length === 0) {
+                sugerencias.style.display = 'none';
+                return;
+            }
+    
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('sugerencia-item');
+                div.textContent = item.titulo;
+                div.addEventListener('click', function() {
+                    selectSugerencia(item);
+                });
+                sugerencias.appendChild(div);
+            });
+    
+            sugerencias.style.display = 'block';
+        } 
+        
+        function selectSugerencia(item) {
+
+            // Validar campos obligatorios
+            if (!item.id || !item.titulo) {
+                alert("Libro inválido. Por favor selecciona un libro válido.");
+                return;
+            }
+
+            buscarLibro.value = item.titulo; // asigna la descripción al input
+
+            
+
+            
+            // reemplaza los parámetros {xxx} de plantilla detalle por los campos del objeto recuperado
+            let detalle = document.getElementById("plantilla_detalle").innerHTML;
+                detalle = detalle.replace(/{ID}/g, item.id);
+                detalle = detalle.replace(/{TITULO}/g, item.titulo);
+                detalle = detalle.replace(/{AUTOR}/g, item.autor ?? '');
+                detalle = detalle.replace(/{EDITORIAL}/g, item.editorial ?? '');
+                detalle = detalle.replace(/{ANIO}/g, item.año ?? '');
+                detalle = detalle.replace(/{EDICION}/g, item.edicion ?? '');
+                detalle = detalle.replace(/{ESTADO}/g, item.estado ?? '');
+
+
+                // asigna el nuevo detalle a la tabla visible
+                document.querySelector("#cargar_detalle tbody")
+                        .insertAdjacentHTML('beforeend', detalle);
+
+            
+            // limpia el campo  buscarLibro y pone el foco de nuevo en él
+            buscarLibro.value = '';
+            buscarLibro.focus();
+
+            sugerencias.style.display = 'none'; // oculta las sugerencias
+
+           
+        }
+        
+        // cierra el div de sugerencias si se hace clic fuera
+        document.addEventListener('click', function(event) {
+            if (!sugerencias.contains(event.target) && event.target !== buscarLibro) {
+                sugerencias.style.display = 'none';
+            }
+        });
+
+    });
+
+    let utils = {
+
+        existeDetalle: function(id) {
+            let res = false;
+            const detalleIds = document.querySelectorAll('input[name="detalle_id[]"]');
+            detalleIds.forEach(function(input) {
+                if (parseInt(id) === parseInt(input.value)) {
+                    res = true;
+                }
+            });
+            return res;
+        },
+
+        eliminarDetalle: function(id) {
+            document.getElementById("fila_" + id).remove();
+        },
+
+      
+
+    }
+
+    // cuando se guarde los libros
+
+    document.querySelector('form').addEventListener('submit', function(){
+        document.getElementById('plantilla_detalle').remove();
+        return;
+    });
+
+</script>
+</body>
+</html>
